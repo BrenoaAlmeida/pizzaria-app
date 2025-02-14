@@ -3,6 +3,8 @@ import {View, Text, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacit
 import { useNavigation  } from '@react-navigation/native'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import { StackPramsList } from '../../routes/app.routes'
+import { api } from '../../services/api'
+
 
 export default function Dashboard(){    
     const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
@@ -12,8 +14,14 @@ export default function Dashboard(){
         if(number === '')
             return;
 
+        const response = await api.post('/order', {
+            table: Number(number)
+        })
+
         //Fazer requisição e abrir a mesa e navegar para a proxima tela
-        navigation.navigate('Order', {number: number, order_id: 'asd'});
+        navigation.navigate('Order', {number: number, order_id: response.data.id});
+
+        setNumber('');
     }
 
     return(        
